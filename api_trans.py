@@ -7,9 +7,10 @@ import json
 data = load_dataset("timdettmers/openassistant-guanaco")
 dataset = data['train']['text']
 
-id_test = 0
+id_test = 1
 data_j = []
-for first_cell in dataset[0:1]:
+len_of_json = 1000
+for first_cell in dataset:
     #khởi tạo dict lưu kết quả trước và sau khi dịch
     dict={}
     #đầu vào để dịch
@@ -23,7 +24,6 @@ for first_cell in dataset[0:1]:
     }
 
     try:
-        id_test += 1
         #kết quả trả về từ api
         request_result = requests.get(url, headers=headers).json()
         time.sleep(0.5)
@@ -32,11 +32,16 @@ for first_cell in dataset[0:1]:
         data_j.append(dict)
     except:
         pass
+    if id_test % len_of_json == 0:
+        #lấy id để bỏ vào tên tệp đầu ra
+        id_json = id_test/len_of_json
+        # Ghi ra file json
+        file_name = f'data_trans_{id_json}.json'
+        with open(file_name, 'w', encoding='utf-8') as file:
+            json.dump(data_j, file, ensure_ascii=False)
+        #khởi tạo lại mảng mới để lưu K document tiếp theo
+        data_j = []
+    id_test += 1
 
-#Ghi ra file json
-with open('data.json', 'w',encoding='utf-8') as file:
-    json.dump(data_j, file,ensure_ascii=False)
 
 print(id_test)
-
-
