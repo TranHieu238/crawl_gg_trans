@@ -1,32 +1,17 @@
-from json import loads
-from requests import get
-import csv
 import time
-from deep_translator import GoogleTranslator
-from googletrans import Translator
 import requests
+from datasets import load_dataset
 
 
-def read_csv_column(filepath, column_name):
-    texts = []
 
-    with open(filepath, 'r', encoding='utf-8') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            text = row[column_name]
-            texts.append(text)
-
-    return texts
-
-
-# Sử dụng hàm để đọc dữ liệu từ cột "text"
-filepath = 'F:\Downloads\B19DCCN630-BTTH2\oasst1-train.csv'  # Thay đổi đường dẫn đến file CSV của bạn
-column_name = 'text'  # Thay đổi tên cột của bạn
-
-texts = read_csv_column(filepath, 'text')
+data = load_dataset("timdettmers/openassistant-guanaco")
+dataset = data['train']['text']
 
 id_test = 0
-for first_cell in texts[0:200]:
+
+for first_cell in dataset[0:100]:
+    first_cell = first_cell.replace("#","").replace("\n", "").replace("&", "")
+
     url = "https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=auto&tl=vi&q=" + first_cell
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36'
