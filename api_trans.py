@@ -9,7 +9,7 @@ dataset = data['train']['text']
 
 id_test = 0
 
-for first_cell in dataset[0:100]:
+for first_cell in dataset[0:1]:
     first_cell = first_cell.replace("#","").replace("\n", "").replace("&", "")
 
     url = "https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=auto&tl=vi&q=" + first_cell
@@ -21,10 +21,8 @@ for first_cell in dataset[0:100]:
         id_test += 1
         request_result = requests.get(url, headers=headers).json()
         time.sleep(0.5)
-        print(request_result)
-        print(
-            '[In English]: ' + request_result['alternative_translations'][0]['alternative'][0]['word_postproc'])
-        print('[Language Dectected]: ' + request_result['src'])
+        print(request_result[0])
+        # print(request_result[0][0])
     except:
         pass
 print(id_test)
