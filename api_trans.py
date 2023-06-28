@@ -43,5 +43,4 @@ for first_cell in dataset:
         data_j = []
     id_test += 1
 
-
 print(id_test)
