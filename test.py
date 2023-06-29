@@ -62,9 +62,12 @@ import numpy as np
 
 
 def translate_and_save(subset, id_json):
+    #mảng lưu dữ liệu sau dịch
     data_j = []
-    len_of_json = 1000
+    #Số lượng document trong 1 file json
+    len_of_json = 25
     check_id = 0
+    id_file = 0
     for id_test, first_cell in enumerate(subset, start=1):
         # Khởi tạo dict lưu kết quả trước và sau khi dịch
         dict_data = {}
@@ -88,16 +91,15 @@ def translate_and_save(subset, id_json):
             data_j.append(dict_data)
         except:
             pass
-
+        #kiểm tra xem đã đủ số lượng document để lưu vào file hay chưa
         if id_test % len_of_json == 0:
-            # lấy id để bỏ vào tên tệp đầu ra
-            id_json = id_test / len_of_json
             # Ghi ra file json
-            file_name = f'data_trans_{id_json}.json'
+            file_name = f'data_trans_{int(id_json)}_{id_file}.json'
             with open(file_name, 'w', encoding='utf-8') as file:
                 json.dump(data_j, file, ensure_ascii=False)
             # khởi tạo lại mảng mới để lưu K document tiếp theo
             data_j = []
+            id_file += 1
         check_id += 1
     print(check_id)
 
